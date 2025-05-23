@@ -1,0 +1,90 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "AI Job Search Assistant Action",
+    "version": "1.0.0",
+    "description": "This Action performs a job search strictly and exclusively within a predefined fixed list of over 420 Israeli job websites. It does not search on any other websites under any circumstances. The search includes major employers and recruitment companies from both the public and private sectors."
+  },
+  "servers": [
+    {
+      "url": "https://yourdomain.com/api"
+    }
+  ],
+  "paths": {
+    "/search-jobs": {
+      "post": {
+        "operationId": "searchJobs",
+        "summary": "Performs a job search using only the fixed list of 420+ job websites in Israel",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "description": "Desired job field (e.g., marketing, senior management, operations, law)"
+                  },
+                  "sector": {
+                    "type": "string",
+                    "description": "Target sector (e.g., private, public, nonprofit)"
+                  },
+                  "location": {
+                    "type": "string",
+                    "description": "Relevant location in Israel (e.g., Center, Tel Aviv within 30 minutes by car/public transport)"
+                  },
+                  "timeframe": {
+                    "type": "string",
+                    "description": "Posting timeframe (e.g., last 30 days, last 7 days, last 24 hours)"
+                  }
+                },
+                "required": ["field", "sector", "location", "timeframe"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of relevant job postings from the fixed websites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "description": "Job title"
+                          },
+                          "company": {
+                            "type": "string",
+                            "description": "Name of the hiring company or organization"
+                          },
+                          "summary": {
+                            "type": "string",
+                            "description": "Brief job description or key requirements"
+                          },
+                          "link": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "Direct link to the job posting"
+                          }
+                        },
+                        "required": ["title", "company", "link"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
