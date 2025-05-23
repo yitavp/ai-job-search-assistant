@@ -3,50 +3,50 @@
   "info": {
     "title": "AI Job Search Assistant Action",
     "version": "1.0.0",
-    "description": "This Action performs a job search strictly and exclusively within a predefined fixed list of over 420 Israeli job websites. It does not search on any other websites under any circumstances. The search includes major employers and recruitment companies from both the public and private sectors."
+    "description": "This Action performs a job search strictly and exclusively within a predefined fixed list of over 420 Israeli job websites, stored and maintained via Google Sheets. The Action returns relevant job listings based on field, sector, and location."
   },
   "servers": [
     {
-      "url": "https://yourdomain.com/api"
+      "url": "https://script.google.com/macros/s/AKfycbxqMSz2maEFANa4-RvYr5v2tpftoE-ljn9sxtCffeEDYjbrY23VNey8HmqCJd5OqWO8/exec"
     }
   ],
   "paths": {
     "/search-jobs": {
-      "post": {
+      "get": {
         "operationId": "searchJobs",
-        "summary": "Performs a job search using only the fixed list of 420+ job websites in Israel",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "field": {
-                    "type": "string",
-                    "description": "Desired job field (e.g., marketing, senior management, operations, law)"
-                  },
-                  "sector": {
-                    "type": "string",
-                    "description": "Target sector (e.g., private, public, nonprofit)"
-                  },
-                  "location": {
-                    "type": "string",
-                    "description": "Relevant location in Israel (e.g., Center, Tel Aviv within 30 minutes by car/public transport)"
-                  },
-                  "timeframe": {
-                    "type": "string",
-                    "description": "Posting timeframe (e.g., last 30 days, last 7 days, last 24 hours)"
-                  }
-                },
-                "required": ["field", "sector", "location", "timeframe"]
-              }
-            }
+        "summary": "Returns job listings based on field, sector, and location, from a fixed list of 420+ websites in Google Sheets",
+        "parameters": [
+          {
+            "name": "field",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Job field (e.g., טכנולוגיה, שירות, רווחה)"
+          },
+          {
+            "name": "sector",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Sector (e.g., פרטי, ציבורי, עמותה)"
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Location in Israel (e.g., מרכז, ירושלים, תל אביב)"
           }
-        },
+        ],
         "responses": {
           "200": {
-            "description": "A list of relevant job postings from the fixed websites",
+            "description": "List of job postings",
             "content": {
               "application/json": {
                 "schema": {
@@ -57,23 +57,10 @@
                       "items": {
                         "type": "object",
                         "properties": {
-                          "title": {
-                            "type": "string",
-                            "description": "Job title"
-                          },
-                          "company": {
-                            "type": "string",
-                            "description": "Name of the hiring company or organization"
-                          },
-                          "summary": {
-                            "type": "string",
-                            "description": "Brief job description or key requirements"
-                          },
-                          "link": {
-                            "type": "string",
-                            "format": "uri",
-                            "description": "Direct link to the job posting"
-                          }
+                          "title": { "type": "string" },
+                          "company": { "type": "string" },
+                          "summary": { "type": "string" },
+                          "link": { "type": "string", "format": "uri" }
                         },
                         "required": ["title", "company", "link"]
                       }
